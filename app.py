@@ -21,4 +21,10 @@ def add_user(user: User):
 @app.post("/adduser")
 def add_user_api(user: User):
     add_user(user)
-    return {"message": "User added successfully!"}
+    conn = sqlite3.connect("database.db")
+    cursor = conn.cursor()
+    cursor.execute("SELECT name FROM users WHERE id >= 5")
+    result = cursor.fetchall()
+    names_with_ids_above_5 = [row[0] for row in result]
+    conn.close()
+    return {"names_with_ids_above_5": names_with_ids_above_5}
